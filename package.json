@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/KeevenOliveira/go-speak-back#readme",
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "express": "4",
     "socket.io": "^4.4.1"
   },
