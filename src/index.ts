@@ -1,32 +1,23 @@
-import express, {Request, Response} from "express"
-import {Server, Socket} from "socket.io";
-import http from "http";
-import cors from 'cors';
-require('dotenv').config();
-
-const io = new Server();
+// from cors import 'cors'
+// import cors from 'cors';
+import express, { Request, Response } from  'express';
+import routes from 'http';
+import { Socket } from 'socket.io';
 const app = express();
-const server = http.createServer(app);
-const router = express.Router();
+const http = routes.createServer(app);
 
-app.use(cors({
+const io = require("socket.io")(http, {
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"]
+    }
+});
 
-}));
-app.use(express.json());
+io.on('connection', (socket: Socket) => {
+    console.log('A user connected');
+    socket.emit('connection', { message: "Hello, world from back-end!" });
+});
 
-// app.get('/', (req : Request, res: Response) => {
-//     res.send({})
-// });
-io.on('connect',(socket)=>{
-    console.log("hello world");
-})
-io.on('error', (error)=>{
-    console.log('Erro:', error)
-})
-
-router.get("/", (req, res) => {
-    res.send({response: "Server running"});
-})
-server.listen(process.env.PORT, () => {
-    console.log("Server Started!"+ ` on Port: ${process.env.PORT}`);
+http.listen(8080, () => {
+    console.log('Listening on *:8080');
 });
